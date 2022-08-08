@@ -105,8 +105,5 @@ function bar(path, btn){
 
 
     })
-
-
-
 }
 

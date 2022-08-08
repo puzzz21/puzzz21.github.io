@@ -94,9 +94,9 @@
     <h4> Transformers </h4>
     Before we start playing around with our explainable, let's understand the Transformers model, as mBART is based on the Transformers
     architecture. It includes multiple encoders and decoders layers, each consisting of a multi-head attention layer and feed-forward neural network. The word embeddings from the inputs are the input for encoders. First, self-attention is calculated for every word, which checks the word with the tokens, i.e., every other word of the input sentence and itself. Which enables the word to understand the context,
-    depending on different terms. For example, in a sentence, The table is big and made of wood.
-    It gives an understanding of the word on the table. It is calculated by converting the input to smaller vector query, value, and keys. And here, the query is the word it, and keys are every other word, and they are multiplied with each other.
-    Then, the outcome is divided by 8 for stable gradient and normalized using softmax.
+    depending on different terms. For example, in a sentence, "The table is big and it is made of wood".
+    "It" is referring to the word on the "table". This is calculated by converting the input to smaller vector query, value, and keys. And here, the query is the word it, and keys are every other word, and they are multiplied with each other.
+    Then, the outcome is divided by 8 which is the square root of dimensions of k for stable gradient and normalized using softmax.
     We will see how it could visualize how the model works.
     Then it is multiplied with value to still focus on what we were processing; then, they are
     summed up and fed to FFN. The paper presents multi-headed attention, which means the
