@@ -1,122 +1,72 @@
-import spacy
-import logging
-import json
-
 from flask import Flask, request, jsonify
-from bson.objectid import ObjectId
-from pymongo import MongoClient
 from flask_cors import CORS
+from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
+import torch
 
-nlp = spacy.load("en_core_web_lg")
-client = MongoClient(port=27017)
-db = client.projectDB
+model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt", output_attentions=True)
+tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
 
 app = Flask(__name__)
 CORS(app)
 
-logging.basicConfig(filename='info.log', filemode='w', format='{"timestamp":"%(asctime)s",\
-   "level": "%(levelname)s", "message": "%(message)s" }', level=logging.INFO)
+@app.route("/translate", methods=['GET', 'POST'])
+def translate():
+    text = request.json["text"]
+    print(text)
+    english = text
 
-'''Receives email object as parameter and find the emails similar
-to the rest of the emails in the database using Spacy.'''
-@app.route("/compare", methods=['GET', 'POST'])
-def compare():
-    similarEmails = []
-    records = db.mails.find({})
-    text = request.json
-    logging.info(text)
-    emailId = text["emailId"]
-    email = db.mails.find_one({"_id": ObjectId(emailId)})
-    email1 = nlp(email['normalized'])
-    del email["all"]
+    tokenizer.src_lang = "en_XX"
+    encoded_en = tokenizer(english, return_tensors="pt")
+    print(encoded_en)
+    generated_tokens = model.generate(
+        **encoded_en,
+        forced_bos_token_id=tokenizer.lang_code_to_id["ne_NP"]
+    )
+    print(generated_tokens)
+    np = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+    print(np)
+    encoder_input_ids = tokenizer(english, add_special_tokens=False, return_tensors="pt").input_ids
+    decoder_input_ids = tokenizer(np, add_special_tokens=False, return_tensors="pt").input_ids
 
-    #similarity comparision for all the emails in the database with the received email
-    for record in records:
-        if 'normalized' in record:
-            email2 = nlp(record['normalized'])
-            similarity = email1.similarity(email2)
-            if(similarity > 0.99):
-                if 'all' in email:
-                    del record["all"]
-                record['similarityScore'] = similarity
-                similarEmails.append(record)
+    outputs = model(input_ids=encoder_input_ids, decoder_input_ids=decoder_input_ids)
 
-    #Check if similar and update isSpam attribute in the email object
-    if(len(similarEmails) > 0):
-        email['similarEmails'] = similarEmails
-        email['isSpam'] = True
-    else:
-        email['isSpam'] = False
-        return 'False'
+    encoder_text = tokenizer.convert_ids_to_tokens(encoder_input_ids[0])
+    decoder_text = tokenizer.convert_ids_to_tokens(decoder_input_ids[0])
+    print(decoder_text)
+    include_layers = list(range(len(outputs.cross_attentions)))
+    attentionsList = format_attention(outputs.cross_attentions, include_layers)
+    attn_data = []
 
-    email["emailId"] = emailId
-    logging.info(email)
+    attn_data.append(
+        {
+            'attn': attentionsList,
+            'source': decoder_text,
+            'target': encoder_text
+        }
+    )
 
-    #Save email object to 'reports' collection and update it in the 'mails' collection with attribute isSpam
-    db.reports.insert_one(email)
-    db.mails.find_one_and_update({"_id": ObjectId(emailId)}, {"$set": {"isSpam": email['isSpam']}})
-    return 'True'
 
-'''Receives the email content in the request and normalizes them, i.e removes punctuations, stop words and spaces
-and send the result as response'''
-@app.route("/normalize", methods=['GET', 'POST'])
-def normalize():
-    normalized = []
-    text = request.json
-    logging.info(text)
-    email = text["email"]
-    nlpEmail = nlp(email)
 
-    for token in nlpEmail:
-        if not token.is_punct and not token.is_stop and not token.is_space:
-            normalized.append(token.lemma_.lower())
+    result = {
+        'attention': attn_data,
+    }
 
-    logging.info(' '.join(normalized))
-    return ' '.join(normalized)
-
-'''Retrieve all the emails belonging to the user to present them in the user dashboard'''
-@app.route("/user", methods=['GET', 'POST'])
-def user():
-    count = 0
-    result = {}
-    forwardedEmails = []
-    text = request.json
-    logging.info(text)
-
-    #Retrieve the emails belonging to the sender email
-    senderEmail = text["userEmail"]
-    emails = db.mails.find({"senderEmail": senderEmail })
-
-    for email in emails:
-        email["_id"] = str(email["_id"])
-
-        #Remove the 'all' attribute of the email object
-        if 'all' in email:
-            del email["all"]
-
-        #count all the spam emails of the user has received
-        if 'isSpam' in email:
-            if(email["isSpam"] is True):
-                count = count + 1
-
-        forwardedEmails.append(email)
-
-    #add emails and spamcount attribute to the result obeject
-    result["emails"] = forwardedEmails
-    result["spamCount"] = count
-    logging.info(result)
     return jsonify(result)
 
-'''Send the logs accumulated in info.log'''
-@app.route("/logs", methods=['GET', 'POST'])
-def logs():
-    result = []
-    with open('info.log') as content:
-        for line in content:
-            print(str(line))
-            result.append(json.loads(line))
-    return dict(data=result)
 
-'''The main thing!'''
+def format_attention(attention, layers=None, heads=None):
+    if layers:
+        attention = [attention[layer_index] for layer_index in layers]
+    squeezed = []
+    for layer_attention in attention:
+        if len(layer_attention.shape) != 4:
+            raise ValueError("The attention tensor does not have the correct number of dimensions. Make sure you set "
+                             "output_attentions=True when initializing your model.")
+        layer_attention = layer_attention.squeeze(0)
+        if heads:
+            layer_attention = layer_attention[heads]
+        squeezed.append(layer_attention)
+    return torch.stack(squeezed)
+
 if __name__ == "__main__":
     app.run()
