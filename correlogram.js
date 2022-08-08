@@ -11,6 +11,9 @@ if ($('#attentionCorr option:selected').text() === "") {
 }
 init()
 function init() {
+    var corrtt = d3.select("body").append("div")
+        .attr("class", "tooltip").style("font-size", "15px").style("width", "auto").style("padding", "5px")
+
     const data = [];
     const leftText = params['attention'][0].src;
     const rightText = params['attention'][0].target;
@@ -128,6 +131,22 @@ function init() {
         .attr("transform", function (d) {
             return `translate(${x(d.x)}, ${y(d.y)})`
         })
+        .on("mouseover", function (event, d, i) {
+            d3.select(this).style("stroke", "black")
+
+            corrtt.transition()
+                .duration(200)
+                .style("opacity", .9);
+            corrtt.html("<b>Value:</b> " + d.value)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY + 10) + "px");
+        })
+        .on("mouseout", function (d) {
+            d3.select(this).style("stroke", "none" )
+            corrtt.transition()
+                .duration(500)
+                .style("opacity", 0);
+        })
 
 
     cor.append("circle")
@@ -139,6 +158,7 @@ function init() {
             return color(d.value);
         })
         .style("opacity", 0.7)
+
 
     cor.append("text")
         .attr("y", 5)

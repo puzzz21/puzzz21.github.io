@@ -1,5 +1,5 @@
 let font = 15;
-let checkboxSize = 25;
+let checkboxSize = 20;
 let headColors = d3.scaleOrdinal(d3.schemeCategory10);
 let srcKey = 0;
 let srcSelect = false;
@@ -10,10 +10,10 @@ let heads = new Array(totHeads).fill(true)
 let layers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 let h = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-initialize();
-renderVis();
+main();
+viz();
 
-function initialize() {
+function main() {
     if ($('#layer option:selected').text() === "") {
         for (const layer of layers) {
             $('#layer').append($("<option />").val(layer).text(layer));
@@ -26,7 +26,7 @@ function initialize() {
     $('#layer').on('change', function (e) {
         layer = +e.currentTarget.value;
         d3.selectAll("#heads svg").remove();
-        renderVis();
+        viz();
     });
 
     $('#layerWord').val(layer).change();
@@ -63,7 +63,7 @@ function initialize() {
 
 }
 
-function renderVis() {
+function viz() {
     const attnData = params['attention'][filter];
     const source = attnData.src;
     const target = attnData.target;
@@ -75,10 +75,10 @@ function renderVis() {
         .attr("width", "100%")
         .attr("height", 320 + "px");
 
-    renderText(svg, source, true, layerAttention, 0);
-    renderText(svg, target, false, layerAttention, 200);
+    text(svg, source, true, layerAttention, 0);
+    text(svg, target, false, layerAttention, 200);
 
-    renderAttention(svg, layerAttention);
+    atten(svg, layerAttention);
 
     const checksvg = d3.select('#heads')
         .append('svg')
@@ -86,10 +86,12 @@ function renderVis() {
         .attr("height", 320 + "px");
 
 
-    drawCheckboxes(0, checksvg, svg, layerAttention);
+    checkbox(0, checksvg, svg, layerAttention);
 }
 
-function renderText(svg, text, isSrc, attention, height) {
+function text(svg, text, isSrc, attention, height) {
+    var textt = d3.select("body").append("div")
+        .attr("class", "tooltip").style("font-size", "15px").style("width", "auto").style("padding", "5px")
 
     const tokenContainer = svg.append("g").selectAll("g")
         .data(text)
@@ -135,7 +137,7 @@ function renderText(svg, text, isSrc, attention, height) {
     });
 }
 
-function renderAttention(svg, attention) {
+function atten(svg, attention) {
     svg.select("#attention").remove()
 
     svg.append("g")
@@ -171,7 +173,8 @@ function renderAttention(svg, attention) {
         .attr("srcId", function () {
             return +this.parentNode.getAttribute("srcId")
         })
-        .attr("targetId", (d, i) => i);
+        .attr("targetId", (d, i) => i)
+
 
     updateAttention(svg)
 }
@@ -189,7 +192,7 @@ function updateAttention(svg) {
         })
 }
 
-function drawCheckboxes(top, svg, s) {
+function checkbox(top, svg, s) {
     svg.select("#attention").remove()
 
     const checkboxContainer = svg.append("g");

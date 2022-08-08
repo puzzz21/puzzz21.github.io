@@ -83,7 +83,7 @@ function bar(path, btn){
                 ttpbar.transition()
                     .duration(200)
                     .style("opacity", .9);
-                ttpbar.html("value:" + d.value)
+                ttpbar.html("<b>Value:</b> " + d.value + "<br/><b>Gender:</b> " + d.key)
                     .style("left", (event.pageX + 10) + "px")
                     .style("top", (event.pageY + 10) + "px");
             })
@@ -101,6 +101,12 @@ function bar(path, btn){
             .attr("x", -margin.top - height/2 + 20)
             .text("scores");
 
+
+
+
     })
+
+
+
 }
 

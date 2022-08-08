@@ -74,11 +74,10 @@
         <img height="100px" src="imgs/e.png" width="450px">
         <img height="100px" src="imgs/f.png" width="450px">
         <figcaption class="figure-caption">
-            Similarly, "she" is translated to "he" for the adjective "intellect".
-            Along with the change in pronoun, for most of the translation from English to Nepali regarding profession,
-            "he" is translated to "उहाँ", which is
-            the highest order of respect in the language. But, for "she", it is mostly translated to the mid-order of
-            respect "उनी".
+            Similarly, "she" is translated to "he" for the adjective "intellect."
+            Along with the change in pronoun, for most of the translations from English to Nepali regarding the profession,
+            "he" is translated to "उहाँ," which is
+            the highest order of respect in the language. But, for "she," it is mostly solved to the mid-order of respect "उनी".
         </figcaption>
     </figure>
         <br/>
@@ -115,15 +114,17 @@
     <br/>
 
     <h4>Attentions Visualization</h4>
+    <p>
     Now let's visualize the softmax output for each attention head and layer.
     We use mBART trained in English for the encoders and Nepali corpus for the decoders.
 
-    Here, for the selected attentions heads and the layer, we are showing the weight distribution of the relation
-    between the source and the translated language by mBART. It represents which words are taken into consideration for
+    Here, for the selected attention heads and the layer, we show the weight distribution of the relation
+    between the source and the translated language by mBART. It represents which words are considered for
     the translation of the particular words. The more visible lines between the words mean a more substantial
-    relation between the English words and translated Nepali words. In contrast, the less visible lines refer to fewer dependencies among the words.
+    relationship between English and translated Nepali words. In contrast, the less visible lines refer to fewer dependencies among the words.
     The attention heads on the left aid to filter the attention lines in the diagram. Likewise, the layer selection filters
     the result according to the specified layer in the model.
+    </p>
     <br/>
 
     <div id="main" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 30px;">
@@ -146,8 +147,8 @@
         </div>
         <br/>
         <figcaption class="figure-caption">
-            Here, it for layer 10 it seems that "she" has stronger relation with nurse than doctor, although the context is
-            opposite. Using this visualization, we are able to see the bias in the contextual word embeddings used for the
+            Here, for layer 10 it seems that "she" has a stronger relationship with "nurse" than "doctor," although the context is
+            the opposite. This visualization shows the bias in the contextual word embeddings used for the
             translation models.
         </figcaption>
 
@@ -155,7 +156,7 @@
         <br/>
         <hr/>
         In the following visualization, the heatmap/ probability distribution of the output from the softmax is represented
-        for selected source (English) tokens. The visualization shows the strength of the relation between the source and
+        for selected source (English) tokens. In addition, the visualization shows the strength of the relation between the source/input and
         the translated words based upon the selected Layer and Attention head.
         <br/>
         <br/>
@@ -178,19 +179,20 @@
         <br/>
         <br/>
         <figcaption class="figure-caption">
-            In layer 3, attention 4, the highest probability for she is doctor. But for most of the other layers, the probability is
-            higher for nurse for the word "she" during translation.
+            In layer 3, attention 4, the highest probability for "she" is "doctor." But for most of the other layers, the likelihood is
+            higher for "nurse" for the word "she" during translation.
         </figcaption>
 
         <hr/>
 
         <br/>
         <br/>
-        The next visualization shows the strength of the attention given to the words
-        during translation through the size of the circle. The radius of the circles are based on the
-        softmax output. Through the visualization , we are able to see which words are considered for the
-        output. In addition, the visualization also shows the softmax output, displayed within the circles.
-        The visualization is based on the selected layer and attentions.
+        <p>
+        The following visualization shows strength of attentions given to the words during translation through the size of the circle. The radius of the circles is based on the
+        softmax output. The visualization lets us see which terms are considered for the
+        output. In addition, the visualization also shows the softmax output displayed within the circles.
+        The visualization is based on the selected layer and attention.
+        </p>
         <br/>
         <br/>
         <span style="user-select:none; padding: 10px;margin:10px">
@@ -203,20 +205,19 @@
             </span>
         <div id="corr"></div>
         <figcaption class="figure-caption">
-            In layer 11, attention 3, the distributed circle shows the bigger size for the word she in relation to the word "nurse".
-            But, in some other cases she has higher probability for doctor too.
+            In layer 11, attention 3, the distributed circle shows greater attention portrayed with the size of the circle and value for the word "nurse" in Nepali for the word "she" in Nepali.
+            But, in other cases, "she" has a higher probability for a doctor.
         </figcaption>
         <br/>
         <hr/>
         <h4>Bias in word embeddings</h4>
         <br/>
-        In the above visualization we were using contextual language model, which using the context of the input
-        to determine the output. This showed the gender bias in the layers and attention heads. Now, lets use the language model
-        which uses the static vector representation, to see the bias in the word embeddings. For this, word2vec is
-        used for the vectorized form of the words. The <a href="https://radimrehurek.com/gensim/models/word2vec.html"> word2vec </a> model is trained on the google-news corpus.
-        In the following visualization, we are checking the gender bias in the words representing adjectives and professions.
-        In order to do so, words representing the female and males are vectorized and averaged and the cosine similarity
-        is calculated with every given words in the vector form.
+        <p>
+        In the above visualizations, we used a contextual language model, which uses the context of the input
+        to determine the output. It showed the gender bias in different layers and attention heads. Let's use the language model, which uses the static vector representation, to see the bias in the word embeddings. For this, we used word2vec to generate the vectorized form of the words. The <a href="https://radimrehurek.com/gensim/models/word2vec.html"> word2vec </a> model is trained on the google-news corpus.
+        In the following visualization, we check the gender bias in words representing adjectives and professions.
+        To do so, terms/words meaning females and males, such as he, she, her, his, etc., are vectorized and averaged, and using the cosine similarity, the distance between the words and gender is calculated. The male is represented on the x-axis, while the female is on the y-axis. Hence, the words having a higher y value show that they are more related to the female gender in the word embeddings. Likewise, a higher x value indicates that the words are closer to the male gender.
+        </p>
         <br/>
         <br/>
         <button class="btn btn-success" id="adj" onclick="scatterplotAdj('./csv/adjEng.csv', 'adj')" type="button">
@@ -230,15 +231,17 @@
         <div id="engPlot"></div>
         <br/>
         <figcaption class="figure-caption">
-            In the above scatter-plot visualization we could we see the words nurse, elegant, shy, ugly are higher in
-            y-axis and lower in x-axis, which shows that they are more related to the word "she". Likewise, word such
-            as leader has lower value for "she" and higher for "he".
+            In the above scatter-plot visualization, we could see the words nurse, elegant, shy, and ugly are higher on
+            the y-axis and lower on the x-axis, which shows that they are more related to the word "she." Likewise, the word such
+            as leader has a lower value for "she" and higher for "he."
         </figcaption>
         <br/>
         <hr/>
         <br/>
+        <p>
         Using the similar method as above, we are calculating, the similarity between the same adjectives and professions
         for the nepali word embeddings using word2vec trained on <a href="https://ieee-dataport.org/open-access/300-dimensional-word-embeddings-nepali-language">Nepali text corpus </a>.
+        </p>
         <br/>
         <br/>
         <button class="btn btn-success" id="adjNp" onclick="scatterplotNp('./csv/adjNep.csv', 'adjNp')" type="button">
@@ -252,20 +255,22 @@
         <div id="nepPlot"></div>
         <br/>
         <figcaption class="figure-caption">
-           Similar bias as the English word-embeddings could be found for Nepali word embeddings too. Here the words
-            in Nepali referring to good-looking, shy, nurse, designer are has higher value in y-axis than x-axis,
-            representing bias towards female gender. In contrast, words such as doctor and ruler has higher value in x-axis.
+            Similar bias as the English word embeddings could also be found for Nepali word embeddings. Here the words
+            in Nepali referring to good-looking, shy, nurse, and designer have a higher value on the y-axis than on the x-axis,
+            representing bias towards the female gender. In contrast, words like doctor and ruler have higher values on the x-axis.
         </figcaption>
         <br/>
         <hr/>
         <br/>
+        <p>
         We could see the gender bias in the word representation in the language models and contextual models.
-        Now, lets see if the similar bias exists in the real world. We are comparing the bias represented by the
-        contextual language model <a href="https://huggingface.co/roberta-base">roberta-base</a> using the mask in the sentence. For example, we are checking
-        the probability for the pronoun in the sentence that includes "nurse" and "doctor". The sentence is
-        "<> is a nurse" and "<> is a doctor". Then, taking the probability for the words "she" and "he", we are comparing the
-        number of nurses and doctors in the real world for male and female genders. For this example, we are only considering the
-        total number of nurses and doctors based on gender in US population only.
+        Let us check the bias represented by the language model relative to the stats in the real world.
+        We use contextual language model <a href="https://huggingface.co/roberta-base">roberta-base</a> for masking the gender-representative word in the sentence. For example, we check
+        the probability for pronouns in sentences that include "nurse" and "doctor." The sentence we used are
+        "<> is a nurse" and "<> is a doctor". Then, taking the probability for the words "she" and "he," we compare the
+        number of nurses and doctors in the real world for male and female genders. For this example, we only consider the
+        total number of nurses and doctors based on gender in the US population.
+        </p>
         <br/>
         <br/>
         <button class="btn btn-success" id="nurse" onclick="bar('./csv/nurse.csv', 'nurse')" type="button">nurse
@@ -277,11 +282,18 @@
         <div id="bar"></div>
         <br/>
         <figcaption class="figure-caption">
-            For nurse, both model and real-world has higher value for female than male. Even though the model predicts higher
-            value for male in case of doctor, in real world, there are more female doctors than male doctors. Here, we need to be
-            careful with the representation, because we are using the real word data of US only.
+            For the nurse, both models and the real world have a higher value for females than males. Even though the model predicts a higher
+            value for males in the case of the doctor, there are more female doctors in the real world than male doctors. Here, we need to be
+            careful with the representation because we are using the real word data of the US only.
         </figcaption>
         <br/>
+        <hr/>
+        <h4>Conclusion</h4>
+        <p>
+        We have now utilized various interactive techniques to visualize the bias in the language models by using both contextual and static word embedding. Gender bias is incorporated in the language models. How do we fix this issue?
+
+        As the model learns from the training data, it is recommended to prioritize documentation regarding the training corpus used in the language models. Similarly, there are various debiasing techniques to solve these issues. One is to use gender-neutral words, and another is detecting the faulty training document and removing it from the trianing corpus. Even though this debiasing technique helps decrease the bias, the leading problem in the language model remains as they are learning from the training data without understanding the meaning.
+        </p>
         <hr/>
         <h4>References</h4>
         <ul>
@@ -291,7 +303,7 @@
             <li> Fairness and machine learning [Barocas et al.]</li>
             <li>A Survey on Bias and Fairness in Machine Learning [Mehrabi et al.]</li>
             <li>On the Dangers of Stochastic Parrots can language models be too big?      [Bender et al.]</li>
-<!--            Lipstick on a Pig: Debiasing Methods Cover up Systematic Gender Biases in Word Embeddings But do not Remove Them [Gonen et al.]-->
+            <li>Lipstick on a Pig: Debiasing Methods Cover up Systematic Gender Biases in Word Embeddings But do not Remove Them [Gonen et al.] </li>
 
 
         </ul>
