@@ -18,7 +18,7 @@
 <body>
 <script charset="utf-8" src="d3.js"></script>
 <div class="container" style="margin-top: 50px;">
-    <h2>Gender bias in language translation models</h2> <br/>
+    <h2>Gender Bias in Language Translation Models</h2> <br/>
     - Puja Maharjan
 
     <hr/>
@@ -47,8 +47,7 @@
     <p>
         Primarily, these language models
         are trained on large datasets based on the text from the internet.
-        For example, GPT2 is prepared on Reddit and new sites.
-        GPT3 is trained in Reddit, Wikipedia, news sites, and a collection of books.
+        GPT3 was trained in Reddit, Wikipedia, news sites, and a collection of books.
         GPT-2 was trained in 272K documents from unreliable news sites and 63K from banned subreddits.
         Models that are trained on these datasets amplify its harm.
         As the datasets do not represent all the demographics, they seem to be biased towards marginalized groups,
@@ -62,14 +61,14 @@
         <br/>
         <br/>
     <figure class="figure">
-    <img height="100px" src="imgs/d.png" width="450px">
-    <img height="100px" src="imgs/c.png" width="450px">
-    <figcaption class="figure-caption">Here, even with the female pronoun for "engineer", the translated result returns "he" for engineer in the
-        result.
-    </figcaption>
-</figure>
-        <br/>
-        <br/>
+        <img height="100px" src="imgs/d.png" width="450px">
+        <img height="100px" src="imgs/c.png" width="450px">
+        <figcaption class="figure-caption">Here, even with the female pronoun for "engineer", the translated result returns "he" for engineer in the
+            result.
+        </figcaption>
+    </figure>
+    <br/>
+    <br/>
     <figure class="figure">
         <img height="100px" src="imgs/e.png" width="450px">
         <img height="100px" src="imgs/f.png" width="450px">
@@ -80,14 +79,14 @@
             the highest order of respect in the language. But, for "she," it is mostly solved to the mid-order of respect "उनी".
         </figcaption>
     </figure>
-        <br/>
-        <br/>
+    <br/>
+    <br/>
     </p>
 
     <h4> mBART </h4>
     “The degree to which a human can understand the cause of the decision.”
     Using explainable AI, we can understand the model behavior. It assists in the interpretability and understandability of ML models.
-    To check the understandability of the language models, we use <a href="https://huggingface.co/docs/transformers/model_doc/mbart"> mBART </a>, the multi-lingual neural machine translator model. It is a multi-lingual sequence-to-sequence (Seq2Seq) denoising auto-encoder. mBART is trained by applying the BART to large-scale monolingual corpora across many languages. It has good performance gain, even for the less resource language pairs such as Nepali-English (9.5 Bleu gain)
+    To check the understandability of the language models, we use <a target="_blank" href="https://huggingface.co/docs/transformers/model_doc/mbart"> mBART </a>, the multi-lingual neural machine translator model. It is a multi-lingual sequence-to-sequence (Seq2Seq) denoising auto-encoder. mBART is trained by applying the BART to large-scale monolingual corpora across many languages. It has good performance gain, even for the less resource language pairs such as Nepali-English (9.5 Bleu gain)
     It includes 12 layers of encoders and 12 layers of decoders, and 16 attention heads.
     <br/>
     <br/>
@@ -95,7 +94,7 @@
     Before we start playing around with our explainable, let's understand the Transformers model, as mBART is based on the Transformers
     architecture. It includes multiple encoders and decoders layers, each consisting of a multi-head attention layer and feed-forward neural network. The word embeddings from the inputs are the input for encoders. First, self-attention is calculated for every word, which checks the word with the tokens, i.e., every other word of the input sentence and itself. Which enables the word to understand the context,
     depending on different terms. For example, in a sentence, "The table is big and it is made of wood".
-    "It" is referring to the word on the "table". This is calculated by converting the input to smaller vector query, value, and keys. And here, the query is the word it, and keys are every other word, and they are multiplied with each other.
+    "It" is referring to the word on the "table". This is calculated by converting the input to smaller vector query, value, and keys. And here, the query is the word "it", and keys are every other word and itself, and they are multiplied with each other.
     Then, the outcome is divided by 8 which is the square root of dimensions of k for stable gradient and normalized using softmax.
     We will see how it could visualize how the model works.
     Then it is multiplied with value to still focus on what we were processing; then, they are
@@ -115,15 +114,15 @@
 
     <h4>Attentions Visualization</h4>
     <p>
-    Now let's visualize the softmax output for each attention head and layer.
-    We use mBART trained in English for the encoders and Nepali corpus for the decoders.
+        Now let's visualize the softmax output for each attention head and layer.
+        We use mBART trained in English for the encoders and Nepali corpus for the decoders.
 
-    Here, for the selected attention heads and the layer, we show the weight distribution of the relation
-    between the source and the translated language by mBART. It represents which words are considered for
-    the translation of the particular words. The more visible lines between the words mean a more substantial
-    relationship between English and translated Nepali words. In contrast, the less visible lines refer to fewer dependencies among the words.
-    The attention heads on the left aid to filter the attention lines in the diagram. Likewise, the layer selection filters
-    the result according to the specified layer in the model.
+        Here, for the selected attention heads and the layer, we show the weight distribution of the relation
+        between the source and the translated language by mBART. It represents which words are considered for
+        the translation of the particular words. The more visible lines between the words mean a more substantial
+        relationship between English and translated Nepali words. In contrast, the less visible lines refer to fewer dependencies among the words.
+        The attention heads on the left aid to filter the attention lines in the diagram. Likewise, the layer selection filters
+        the result according to the specified layer in the model.
     </p>
     <br/>
 
@@ -188,10 +187,10 @@
         <br/>
         <br/>
         <p>
-        The following visualization shows strength of attentions given to the words during translation through the size of the circle. The radius of the circles is based on the
-        softmax output. The visualization lets us see which terms are considered for the
-        output. In addition, the visualization also shows the softmax output displayed within the circles.
-        The visualization is based on the selected layer and attention.
+            The following visualization shows strength of attentions given to the words during translation through the size of the circle. The radius of the circles is based on the
+            softmax output. The visualization lets us see which terms are considered for the
+            output. In addition, the visualization also shows the softmax output displayed within the circles.
+            The visualization is based on the selected layer and attention.
         </p>
         <br/>
         <br/>
@@ -213,10 +212,10 @@
         <h4>Bias in word embeddings</h4>
         <br/>
         <p>
-        In the above visualizations, we used a contextual language model, which uses the context of the input
-        to determine the output. It showed the gender bias in different layers and attention heads. Let's use the language model, which uses the static vector representation, to see the bias in the word embeddings. For this, we used word2vec to generate the vectorized form of the words. The <a href="https://radimrehurek.com/gensim/models/word2vec.html"> word2vec </a> model is trained on the google-news corpus.
-        In the following visualization, we check the gender bias in words representing adjectives and professions.
-        To do so, terms/words meaning females and males, such as he, she, her, his, etc., are vectorized and averaged, and using the cosine similarity, the distance between the words and gender is calculated. The male is represented on the x-axis, while the female is on the y-axis. Hence, the words having a higher y value show that they are more related to the female gender in the word embeddings. Likewise, a higher x value indicates that the words are closer to the male gender.
+            In the above visualizations, we used a contextual language model, which uses the context of the input
+            to determine the output. It showed the gender bias in different layers and attention heads. Let's use the language model, which uses the static vector representation, to see the bias in the word embeddings. For this, we used word2vec to generate the vectorized form of the words. The <a target="_blank" href="https://radimrehurek.com/gensim/models/word2vec.html"> word2vec </a> model is trained on the google-news corpus.
+            In the following visualization, we check the gender bias in words representing adjectives and professions.
+            To do so, terms/words meaning females and males, such as he, she, her, his, etc., are vectorized and averaged, and using the cosine similarity, the distance between the words and gender is calculated. The male is represented on the x-axis, while the female is on the y-axis. Hence, the words having a higher y value show that they are more related to the female gender in the word embeddings. Likewise, a higher x value indicates that the words are closer to the male gender.
         </p>
         <br/>
         <br/>
@@ -239,8 +238,8 @@
         <hr/>
         <br/>
         <p>
-        Using the similar method as above, we are calculating, the similarity between the same adjectives and professions
-        for the nepali word embeddings using word2vec trained on <a href="https://ieee-dataport.org/open-access/300-dimensional-word-embeddings-nepali-language">Nepali text corpus </a>.
+            Using the similar method as above, we are calculating, the similarity between the same adjectives and professions
+            for the nepali word embeddings using word2vec trained on <a target="_blank" href="https://ieee-dataport.org/open-access/300-dimensional-word-embeddings-nepali-language">Nepali text corpus </a>.
         </p>
         <br/>
         <br/>
@@ -263,13 +262,13 @@
         <hr/>
         <br/>
         <p>
-        We could see the gender bias in the word representation in the language models and contextual models.
-        Let us check the bias represented by the language model relative to the stats in the real world.
-        We use contextual language model <a href="https://huggingface.co/roberta-base">roberta-base</a> for masking the gender-representative word in the sentence. For example, we check
-        the probability for pronouns in sentences that include "nurse" and "doctor." The sentence we used are
-        "<> is a nurse" and "<> is a doctor". Then, taking the probability for the words "she" and "he," we compare the
-        number of nurses and doctors in the real world for male and female genders. For this example, we only consider the
-        total number of nurses and doctors based on gender in the US population.
+            We could see the gender bias in the word representation in the language models and contextual models.
+            Let us check the bias represented by the language model relative to the stats in the real world.
+            We use contextual language model <a target="_blank" href="https://huggingface.co/roberta-base">roberta-base</a> for masking the gender-representative word in the sentence. For example, we check
+            the probability for pronouns in sentences that include "nurse" and "doctor." The sentence we used are
+            "<> is a nurse" and "<> is a doctor". Then, taking the probability for the words "she" and "he," we compare the
+            number of nurses and doctors in the real world for male and female genders. For this example, we only consider the
+            total number of nurses and doctors based on gender in the US population.
         </p>
         <br/>
         <br/>
@@ -290,29 +289,29 @@
         <hr/>
         <h4>Conclusion</h4>
         <p>
-        We have now utilized various interactive techniques to visualize the bias in the language models by using both contextual and static word embedding. Gender bias is incorporated in the language models. How do we fix this issue?
+            We have now utilized various interactive techniques to visualize the bias in the language models by using both contextual and static word embedding. Gender bias is incorporated in the language models. How do we fix this issue?
 
-        As the model learns from the training data, it is recommended to prioritize documentation regarding the training corpus used in the language models. Similarly, there are various debiasing techniques to solve these issues. One is to use gender-neutral words, and another is detecting the faulty training document and removing it from the trianing corpus. Even though this debiasing technique helps decrease the bias, the leading problem in the language model remains as they are learning from the training data without understanding the meaning.
+            As the model learns from the training data, it is recommended to prioritize documentation regarding the training corpus used in the language models. Similarly, there are various debiasing techniques to solve these issues. One is to use gender-neutral words, and another is detecting the faulty training document and removing it from the trianing corpus. Even though this debiasing technique helps decrease the bias, the leading problem in the language model remains as they are learning from the training data without understanding the meaning.
         </p>
         <hr/>
         <h4>References</h4>
         <ul>
-            <li>https://jalammar.github.io/illustrated-transformer/</li>
-            <li>Attention Is All You Need [Vaswani et al.]</li>
-            <li>Multilingual Denoising Pre-training for Neural Machine Translation [Liu et al.]</li>
-            <li> Fairness and machine learning [Barocas et al.]</li>
-            <li>A Survey on Bias and Fairness in Machine Learning [Mehrabi et al.]</li>
-            <li>On the Dangers of Stochastic Parrots can language models be too big?      [Bender et al.]</li>
-            <li>Lipstick on a Pig: Debiasing Methods Cover up Systematic Gender Biases in Word Embeddings But do not Remove Them [Gonen et al.] </li>
+            <li> <a target="_blank" href="https://jalammar.github.io/illustrated-transformer/">https://jalammar.github.io/illustrated-transformer/</a></li>
+            <li> <a target="_blank" href="https://arxiv.org/abs/1706.03762?context=cs">Attention Is All You Need [Vaswani et al.]</a></li>
+            <li><a target="_blank" href="https://arxiv.org/abs/2001.08210">Multilingual Denoising Pre-training for Neural Machine Translation [Liu et al.]</a></li>
+            <li><a target="_blank" href="https://fairmlbook.org">Fairness and machine learning [Barocas et al.]</a></li>
+            <li><a target="_blank" href="https://arxiv.org/abs/1908.09635">A Survey on Bias and Fairness in Machine Learning [Mehrabi et al.]</a></li>
+            <li><a target="_blank" href="https://dl.acm.org/doi/10.1145/3442188.3445922">On the Dangers of Stochastic Parrots can language models be too big?      [Bender et al.]</a></li>
+            <li><a target="_blank" href="https://arxiv.org/abs/1903.03862">Lipstick on a Pig: Debiasing Methods Cover up Systematic Gender Biases in Word Embeddings But do not Remove Them [Gonen et al.] </a></li>
 
 
         </ul>
     </div>
-<!--    <p>-->
-<!--        “Feeding AI system on the world’s beauty, ugliness and cruelty but expecting it to reflect only the beauty is-->
-<!--        fantasy”-->
+    <!--    <p>-->
+    <!--        “Feeding AI system on the world’s beauty, ugliness and cruelty but expecting it to reflect only the beauty is-->
+    <!--        fantasy”-->
 
-<!--    </p>-->
+    <!--    </p>-->
     <script src="./attentionVar.js"></script>
     <script src="./attentionViz.js"></script>
     <script src="./wordHeadMap.js"></script>
