@@ -30,7 +30,7 @@
         It decides who gets hired. It tells who pays more for the insurance or the products based on their features.
         Also, it outputs the students who get accepted by the University. Law enforcement also uses it to determine who
         gets bailed.
-        A famous example is COMPAS. The model was biased toward African-Americans based on a few parameters, such as
+        A famous example is COMPAS. The model was biased against African-Americans based on a few parameters, such as
         their neighborhood.
 
         Based on their criticality these models should not incorporate bias based on any attribute for the given input
@@ -50,7 +50,7 @@
         GPT3 was trained in Reddit, Wikipedia, news sites, and a collection of books.
         GPT-2 was trained in 272K documents from unreliable news sites and 63K from banned subreddits.
         Models that are trained on these datasets amplify its harm.
-        As the datasets do not represent all the demographics, they seem to be biased towards marginalized groups,
+        As the datasets do not represent all the demographics, they seem to be biased against marginalized groups,
         consisting
         of abusive language and bias in gender, race, ethnicity, and disability status.
         These transformer models integrate structures from the training data set according to the probability without
@@ -98,11 +98,11 @@
     Then, the outcome is divided by 8 which is the square root of dimensions of k for stable gradient and normalized using softmax.
     We will see how it could visualize how the model works.
     Then it is multiplied with value to still focus on what we were processing; then, they are
-    summed up and fed to FFN. The paper presents multi-headed attention, which means the
+    summed up and fed to FFN (Feed Forward Network). The paper presents multi-headed attention, which means the
     same process of self-attention is calculated multiple times; this improves the models.
     From FFN, the result is passed to every layer of the decoder.
     Here, the process is repeated. In the decoder, masking is used for predicting the next word.
-    The word representations for these vectors are done by the Linear layer, which is fully connected to nn and Softmax.
+    The word representations for these vectors are done by the Linear layer, which is fully connected to NN (Neural Network) and Softmax.
     <br/>
     <figure class="figure">
         <img height="500px" src="imgs/t.png" width="450px">

@@ -1,3 +1,8 @@
+/**
+ * Code ref:
+ * https://github.com/jessevig/bertviz
+ */
+
 let font = 15;
 let checkboxSize = 20;
 let headColors = d3.scaleOrdinal(d3.schemeCategory10);
